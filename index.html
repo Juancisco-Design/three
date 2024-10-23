@@ -1,0 +1,779 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8" /> 
+     <title>PROYECTO_2DO_PARCIAL_FLORES ALBARRAN JUAN FRANCISCO</title>
+     <link rel="icon" type="image/png" href="./assets/favicon.png"/>
+     <style>
+     </style>
+</head>
+<body>
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module">
+
+    /*import {RoundedBoxGeometry} from './js/RoundedBoxGeometry.js';
+    //👉🏽 Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);*/
+
+    // Import  THREE.js 
+    import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
+    import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
+    import { RoundedBoxGeometry } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/geometries/RoundedBoxGeometry.js";
+
+     //IMPORTAR ELEMENTOS JS OFRENDA
+    import pollomole from'./js/mole.js'
+    import pan from'./js/pan.js'
+    import lima from'./js/lima.js'
+    import mandarina from'./js/mandarina.js'
+    import jarro from'./js/jarro.js'
+    import vela from'./js/veladora.js'
+    import incienso from'./js/incienso.js'
+    import arroz from'./js/arroz.js'
+    import agua from'./js/agua.js'
+    import vaso from'./js/vaso.js'
+    import tequila from'./js/tequila.js'
+    import sal from'./js/sal.js'
+    import caballo from'./js/caballito.js'
+    import marco from'./js/marco.js'
+    import flor from'./js/flor.js'
+
+    //👉🏽 Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({canvas: document.getElementById('myCanvas'),antialias: true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x210225); //COLOR DE FONDO
+
+    //🎬 Creando nueva escena 
+    var scene = new THREE.Scene();
+
+    //🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 5000);
+    scene.add(camera);
+
+    // Evento para redimensionar el canvas
+
+    // Sizes: Objeto donde se toman los tamaños interiores 'inner' de la ventana.
+    const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    };
+
+    // Tomando el 'canvas' mediante el id 'myCanvas' del HTML para cambiar sus dimensiones
+    const canvas = document.getElementById('myCanvas');
+
+    // Evento que se ejecutará al redimensionar 'resize' nuestra ventana
+    window.addEventListener('resize', () => {
+
+    // Actualizando los valores del objeto 'sizes' con las medidas internas de la ventana
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+
+    // Actualización de los valores en la cámara como la relación-aspecto y la matriz de proyección.
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+
+    // Aplicando al render el nuevo tamaño del 'viewport'
+    renderer.setSize(sizes.width, sizes.height);
+    });
+
+    //👉🏽Settings de la cámara
+    camera.position.set(0, 20, 70);
+
+    //👉🏽Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    // Ajustar la velocidad de rotación y zoom
+    controls.rotateSpeed = 0.09; // Disminuir para un movimiento más lento
+    controls.zoomSpeed = 0.5; // Disminuir para un zoom más lento
+ 
+    controls.maxPolarAngle = Math.PI / 2.1; // Limitar la rotación vertical
+    controls.minPolarAngle = 0; // Limitar la rotación vertical
+
+    // Limitar el zoom
+    controls.maxDistance = 600; // Ajusta este valor según tus necesidades
+    controls.minDistance = 30; // Opcional: Limitar el zoom hacia adentro
+
+    /*/✏️GridHelper
+    const gridHelper = new THREE.GridHelper(50,10);
+    scene.add (gridHelper);
+
+    //✏️Ejes
+    const axesHelper = new THREE.AxesHelper(50);
+    scene.add (axesHelper);*/
+  
+
+    // 🪄🪄 SECCIÓN DE CÓDIGO 🪄🪄
+
+    //BACKGROUND
+    var loader = new THREE.TextureLoader();
+    var bgTexture = loader.load ('./assets/fondo.jpg')
+    scene.background = bgTexture;
+
+    //LUZ 1
+    var luzAmbiental = new THREE.AmbientLight(0x505050, 0.3);
+    scene.add(luzAmbiental);
+    
+    //LUZ 2
+    var luzRelleno = new THREE.AmbientLight(0x707070, 0.3);
+    scene.add(luzRelleno);
+
+    //LUZ 3
+    var light=new THREE.SpotLight(0xffffff, 0.5);
+    light.position.set(30,50,30);
+    light.target.position.set(10, 100, 0); 
+    scene.add(light);
+    
+    //LUZ 4
+    var light=new THREE.SpotLight(0xffffff, 0.5);
+    light.position.set(-30,50,-30);
+    light.target.position.set(10, 100, 0); 
+    scene.add(light);
+
+     // LUZ 5
+     var luzFrontal = new THREE.DirectionalLight(0xffffff, 0.5);
+    luzFrontal.position.set(0, 100, 100);
+    luzFrontal.target.position.set(10, 100, 0); 
+    scene.add(luzFrontal);
+    scene.add(luzFrontal.target);
+
+    // LUZ 6
+    var luzTrasera = new THREE.DirectionalLight(0xffffff, 0.5);
+    luzTrasera.position.set(0, 100, -100); 
+    luzTrasera.target.position.set(-10, 100, 0);
+    scene.add(luzTrasera); 
+    scene.add(luzTrasera.target);
+
+    // CABEZA
+    var geometriaCabeza = new THREE.SphereGeometry(2.88, 32, 32); 
+    var texturaEsqueleto = new THREE.TextureLoader().load("./assets/hueso.jpg");
+    var materialEsqueleto = new THREE.MeshLambertMaterial({ map: texturaEsqueleto });
+    var cabeza = new THREE.Mesh(geometriaCabeza, materialEsqueleto);
+    scene.add(cabeza);
+    cabeza.position.set(0, 32, 0); 
+
+    // OJOS
+    var geometriaOjo = new THREE.SphereGeometry(0.8, 32, 32); 
+    var materialOjo = new THREE.MeshLambertMaterial({ color: 0x000000 });
+    var ojoIzquierdo = new THREE.Mesh(geometriaOjo, materialOjo);
+    var ojoDerecho = new THREE.Mesh(geometriaOjo, materialOjo);
+    scene.add(ojoIzquierdo);
+    scene.add(ojoDerecho);
+    ojoIzquierdo.position.set(-0.8, 31.5, 2.2); 
+    ojoDerecho.position.set(0.8, 31.5, 2.2); 
+
+    // BOCA
+    var geometriaBoca = new THREE.SphereGeometry(0.4, 32, 32); 
+    var materialBoca = new THREE.MeshLambertMaterial({ color: 0x000000 });
+    var BocaIzquierda = new THREE.Mesh(geometriaBoca, materialBoca);
+    var BocaDerecha = new THREE.Mesh(geometriaBoca, materialBoca);
+    scene.add(BocaIzquierda);
+    scene.add(BocaDerecha);
+    BocaIzquierda.position.set(-0.1, 30, 1.6); 
+    BocaDerecha.position.set(0.1, 30, 1.6); 
+
+    // FOSAS
+    var geometriaFosa = new THREE.SphereGeometry(0.22, 32, 32); 
+    var materialFosa = new THREE.MeshLambertMaterial({ color: 0x000000 });
+    var FosaIzquierda = new THREE.Mesh(geometriaFosa, materialFosa);
+    var FosaDerecha = new THREE.Mesh(geometriaFosa, materialFosa);
+    scene.add(FosaIzquierda);
+    scene.add(FosaDerecha);
+    FosaIzquierda.position.set(-0.1, 30.6, 2.3); 
+    FosaDerecha.position.set(0.1, 30.6, 2.3); 
+
+    //AGRUPAR ROSTRO
+    var caraGrupo = new THREE.Group();
+    caraGrupo.add(ojoIzquierdo);
+    caraGrupo.add(ojoDerecho);
+    caraGrupo.add(BocaIzquierda);
+    caraGrupo.add(BocaDerecha);
+    caraGrupo.add(FosaIzquierda);
+    caraGrupo.add(FosaDerecha);
+    scene.add(caraGrupo);
+
+    // CLONAR ROSTRO
+    var caraGrupoDuplicado = caraGrupo.clone();
+    scene.add(caraGrupoDuplicado);
+
+    // ROTAR ROSTRO
+    caraGrupoDuplicado.rotation.y += Math.PI; // O también: 3.14159
+
+    // ESQUELETO 
+    var geometriaEsqueleto = new THREE.CylinderGeometry(0.5, 0, 7, 32); 
+    var hueso1 = new THREE.Mesh(geometriaEsqueleto, materialEsqueleto);
+    scene.add(hueso1);
+    hueso1.position.set(0, 24, 0); 
+
+    // ESQUELETO COSTILLAS
+    var geometriaCostillas = new THREE.CylinderGeometry(0.5, 0, 2.8, 32); 
+
+    var costilla1 = new THREE.Mesh(geometriaCostillas, materialEsqueleto);
+    var costilla2 = new THREE.Mesh(geometriaCostillas, materialEsqueleto);
+    var costilla3 = new THREE.Mesh(geometriaCostillas, materialEsqueleto);
+    var costilla4 = new THREE.Mesh(geometriaCostillas, materialEsqueleto);
+    var costilla5 = new THREE.Mesh(geometriaCostillas, materialEsqueleto);
+    var costilla6 = new THREE.Mesh(geometriaCostillas, materialEsqueleto);
+
+    scene.add(costilla1);
+    scene.add(costilla2);
+    scene.add(costilla3);
+    scene.add(costilla4);
+    scene.add(costilla5);
+    scene.add(costilla6);
+
+    costilla1.position.set(-1.8, 28, 0); 
+    costilla2.position.set(-2, 26.5, 0);
+    costilla3.position.set(-1.7, 25, 0);
+    costilla4.position.set(1.8, 28, 0);
+    costilla5.position.set(2, 26.5, 0);
+    costilla6.position.set(1.7, 25, 0);
+
+    costilla1.rotation.z = 1.3;
+    costilla2.rotation.z = 1.57;
+    costilla3.rotation.z = 2;
+    costilla4.rotation.z = 5;
+    costilla5.rotation.z = 4.7;
+    costilla6.rotation.z = 4.3;
+
+    // BRAZOS
+    var geometriaBrazo = new THREE.CylinderGeometry(0.6, 0.3, 3, 32); 
+
+    var brazoIzquierdo = new THREE.Mesh(geometriaBrazo, materialEsqueleto);
+    var brazoDerecho = new THREE.Mesh(geometriaBrazo, materialEsqueleto);
+    var brazoIzquierdoCont = new THREE.Mesh(geometriaBrazo, materialEsqueleto);
+    var brazoDerechoCont = new THREE.Mesh(geometriaBrazo, materialEsqueleto);
+    
+    scene.add(brazoIzquierdo);
+    scene.add(brazoDerecho);
+    scene.add(brazoIzquierdoCont);
+    scene.add(brazoDerechoCont);
+
+    brazoIzquierdo.position.set(-4.32, 26, 0); 
+    brazoDerecho.position.set(4.32, 26, 0); 
+    brazoIzquierdoCont.position.set(-4.32, 21, 0); 
+    brazoDerechoCont.position.set(4.32, 21, 0); 
+
+    // UNIONES
+    var geometriaUnion = new THREE.SphereGeometry(0.5); 
+
+    var union1Izquierda = new THREE.Mesh(geometriaUnion, materialEsqueleto);
+    var union1Derecha = new THREE.Mesh(geometriaUnion, materialEsqueleto);
+    var union2Izquierda = new THREE.Mesh(geometriaUnion, materialEsqueleto);
+    var union2Derecha = new THREE.Mesh(geometriaUnion, materialEsqueleto);
+    var unionCuello = new THREE.Mesh(geometriaUnion, materialEsqueleto);
+
+    scene.add(union1Izquierda);
+    scene.add(union1Derecha);
+    scene.add(union2Izquierda);
+    scene.add(union2Derecha);
+    scene.add(unionCuello);
+
+    union1Izquierda.position.set(-4.32, 23.5, 0); 
+    union1Derecha.position.set(4.32, 23.5, 0); 
+    union2Izquierda.position.set(-4.32, 28.6, 0); 
+    union2Derecha.position.set(4.32, 28.6, 0);
+    unionCuello.position.set(0, 28.3, 0); 
+
+    // UNION CENTRO
+    var geometriaUnion = new THREE.SphereGeometry(0.8); 
+    var unioncentro = new THREE.Mesh(geometriaUnion, materialEsqueleto);
+    scene.add(unioncentro);
+    unioncentro.position.set(0, 23.4, 0);
+
+    // MANOS
+    var geometriaMano = new THREE.SphereGeometry(0.8); // Reducido en un 20%
+    var manoIzquierda = new THREE.Mesh(geometriaMano, materialEsqueleto);
+    var manoDerecha = new THREE.Mesh(geometriaMano, materialEsqueleto);
+    scene.add(manoIzquierda);
+    scene.add(manoDerecha);
+    manoIzquierda.position.set(-4.32, 19, 0); // Ajustado para la nueva escala
+    manoDerecha.position.set(4.32, 19, 0); // Ajustado para la nueva escala
+
+    // VESTIDO
+    var geometriaVestido = new THREE.ConeGeometry(8, 11, 500);
+    var texturaVestido = new THREE.TextureLoader().load("./assets/vestido.jpg");
+    var materialVestido = new THREE.MeshLambertMaterial({ map: texturaVestido }); 
+    var vestido = new THREE.Mesh(geometriaVestido, materialVestido);
+    scene.add(vestido);
+    vestido.position.set(0, 19, 0); 
+
+    // DECORACION VESTIDO 1
+    var geometriadecoracion = new THREE.CylinderGeometry(6.2, 8.4, 2.0, 10);
+    var texturadecoracion1 = new THREE.TextureLoader().load("./assets/vestido2.jpg");
+    var materialdecoracion1 = new THREE.MeshLambertMaterial({ map: texturadecoracion1 });  
+    var decoracion = new THREE.Mesh(geometriadecoracion, materialdecoracion1);
+    scene.add(decoracion);
+    decoracion.position.set(0, 14.7, 0); 
+
+    // DECORACION VESTIDO 2
+    var geometriadecoracion = new THREE.CylinderGeometry(5, 6, 2.0, 10); 
+    var texturadecoracion2 = new THREE.TextureLoader().load("./assets/vestido2.jpg");
+    var materialdecoracion2 = new THREE.MeshLambertMaterial({ map: texturadecoracion2 });
+    var decoracion = new THREE.Mesh(geometriadecoracion, materialdecoracion2);
+    scene.add(decoracion);
+    decoracion.position.set(0, 17, 0); 
+
+    // DECORACION VESTIDO 3
+    var geometriadecoracion = new THREE.CylinderGeometry(3, 5, 2.0, 10); 
+    var texturadecoracion3 = new THREE.TextureLoader().load("./assets/vestido2.jpg");
+    var materialdecoracion3 = new THREE.MeshLambertMaterial({ map: texturadecoracion3 });
+    var decoracion = new THREE.Mesh(geometriadecoracion, materialdecoracion3);
+    scene.add(decoracion);
+    decoracion.position.set(0, 19, 0);
+
+    // DECORACION VESTIDO 4
+    var geometriadecoracion = new THREE.CylinderGeometry(2, 3.2, 1.8, 10);
+    var texturadecoracion4 = new THREE.TextureLoader().load("./assets/vestido2.jpg");
+    var materialdecoracion4 = new THREE.MeshLambertMaterial({ map: texturadecoracion4 }); 
+    var decoracion = new THREE.Mesh(geometriadecoracion, materialdecoracion4);
+    scene.add(decoracion);
+    decoracion.position.set(0, 21, 0);
+
+    //FAJA
+    var geometrifaja = new THREE.CylinderGeometry(2,2,3,100);
+    var texturafaja = new THREE.TextureLoader().load("./assets/vestido2.jpg");
+    var materialfaja = new THREE.MeshLambertMaterial({ map: texturafaja });
+    var faja = new THREE.Mesh(geometrifaja, materialfaja);
+    scene.add(faja);
+    faja.position.set(0,22,0);
+
+    //PISO 1
+    var geometriapiso1 = new THREE.CylinderGeometry(25,25,3.5,10);
+    var texturapiso1 = new THREE.TextureLoader().load("./assets/piso1.jpg");
+    var materialpiso1 = new THREE.MeshLambertMaterial({ map: texturapiso1 });
+    var piso1 = new THREE.Mesh(geometriapiso1,materialpiso1);
+    scene.add(piso1);
+    piso1.position.set(0,1.5,0);
+
+    //PISO 2
+    var geometriapiso2 = new THREE.CylinderGeometry(20,20,3.5,10);
+    var texturapiso2 = new THREE.TextureLoader().load("./assets/piso2.jpg");
+    var materialpiso2 = new THREE.MeshLambertMaterial({ map: texturapiso2 });
+    var piso2 = new THREE.Mesh(geometriapiso2,materialpiso2);
+    scene.add(piso2);
+    piso2.position.set(0,5,0);
+
+    //PISO 3
+    var geometriapiso3 = new THREE.CylinderGeometry(15,15,3.5,10);
+    var texturapiso3 = new THREE.TextureLoader().load("./assets/piso3.jpg");
+    var materialpiso3 = new THREE.MeshLambertMaterial({ map: texturapiso3 });
+    var piso3 = new THREE.Mesh(geometriapiso3,materialpiso3);
+    scene.add(piso3);
+    piso3.position.set(0,8.5,0);
+
+    //PISO 4
+    var geometriapiso4 = new THREE.CylinderGeometry(10,10,3.5,10);
+    var texturapiso4 = new THREE.TextureLoader().load("./assets/piso4.jpg");
+    var materialpiso4 = new THREE.MeshLambertMaterial({ map: texturapiso4 });
+    var piso4 = new THREE.Mesh(geometriapiso4,materialpiso4);
+    scene.add(piso4);
+    piso4.position.set(0,12,0);
+
+    //--- OFRENDA ELEMENTOS ---
+
+    // ** MOLE IMPORTADO **
+    var molito=pollomole({x:0, y:0, z:0});
+    scene.add(molito);
+    molito.position.set(-30,20,0);
+    molito.scale.set(1.1, 1.1, 1.1);
+    scene.remove(molito);
+
+    // PARAMETROS CLONACIÓN MOLE
+    var radio = 21.5; // Radio del círculo
+    var altura = 2.7; // Altura de los clones
+    var numClones = 5; // Número de clones
+
+    // CLONAR MOLE
+    function crearClonesMole(baseObject, numClones, radio, altura) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesMole(molito, numClones, radio, altura);
+
+    // ** PAN IMPORTADO **
+    var pancito=pan({x:0, y:0, z:0});
+    scene.add(pancito);
+    pancito.position.set(-30,20,0);
+    pancito.scale.set(0.6, 0.6, 0.6);
+    scene.remove(pancito);
+
+    // PARAMETROS CLONACIÓN PAN
+    var radioPan = 21.5; // Radio del círculo
+    var alturaPan = 2.1; // Altura de los clones
+    var numClonesPan = 5; // Número de clones
+
+    // CLONAR PAN
+    function crearClonesPan(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesPan(pancito, numClonesPan, radioPan, alturaPan, Math.PI / numClones);
+
+    // ** LIMA IMPORTADA **
+    var limita=lima({x:0, y:0, z:0});
+    scene.add(limita);
+    limita.position.set(-30,20,0);
+    limita.scale.set(1, 1, 1);
+    scene.remove(limita);
+
+    // PARAMETROS CLONACIÓN LIMA
+    var radioLima = 22.5; // Radio del círculo
+    var alturaLima = 3.1; // Altura de los clones
+    var numClonesLima = 5; // Número de clones
+
+    // CLONAR LIMA
+    function crearClonesLima(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesLima(limita, numClonesLima, radioLima, alturaLima, Math.PI / 2);
+
+    // ** MANDARINA IMPORTADA **
+    var mandarinita=mandarina({x:0, y:0, z:0});
+    scene.add(mandarinita);
+    mandarinita.position.set(-30,20,0);
+    mandarinita.scale.set(1, 1, 1);
+    scene.remove(mandarinita);
+
+    // PARAMETROS CLONACIÓN MANDARINA
+    var radioMandarina = 22.5; // Radio del círculo
+    var alturaMandarina = 3; // Altura de los clones
+    var numClonesMandarina = 5; // Número de clones
+
+    // CLONAR MANDARINA
+    function crearClonesMandarina(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesMandarina(mandarinita, numClonesMandarina, radioMandarina, alturaMandarina, Math.PI / -2);
+    
+    // ** JARRO IMPORTADO **
+    var jarrito=jarro({x:0, y:0, z:0});
+    scene.add(jarrito);
+    jarrito.position.set(-30,20,0);
+    jarrito.scale.set(1.2, 1.2, 1.2);
+    scene.remove(jarrito);
+
+    // PARAMETROS CLONACIÓN JARRITO
+    var radioJarro = 17; // Radio del círculo
+    var alturaJarro = 6.7; // Altura de los clones
+    var numClonesJarro = 5; // Número de clones
+
+    // CLONAR JARRITO
+    function crearClonesJarro(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesJarro(jarrito, numClonesJarro, radioJarro, alturaJarro, 1.9);
+
+
+    // ** VELA IMPORTADA **
+    var velita=vela({x:0, y:0, z:0});
+    scene.add(velita);
+    velita.position.set(-30,20,0);
+    velita.scale.set(1.2, 1.2, 1.2);
+    scene.remove(velita);
+
+    // PARAMETROS CLONACIÓN VELA
+    var radioVela = 17; // Radio del círculo
+    var alturaVela = 6.7; // Altura de los clones
+    var numClonesVela = 5; // Número de clones
+
+    // CLONAR VELA
+    function crearClonesVela(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesVela(velita, numClonesVela, radioVela, alturaVela, 2.9);
+    crearClonesVela(velita, numClonesVela, radioVela, alturaVela, -2.55);
+
+
+
+    // ** INCIENSO IMPORTADO **
+    var inciensito=incienso({x:0, y:0, z:0});
+    scene.add(inciensito);
+    inciensito.position.set(-30,20,0);
+    inciensito.scale.set(2.6, 2.6, 2.6);
+    scene.remove(inciensito);
+
+    // PARAMETROS CLONACIÓN INCIENSO
+    var radioIncienso = 17; // Radio del círculo
+    var alturaIncienso = 8.3; // Altura de los clones
+    var numClonesIncienso = 5; // Número de clones
+
+    // CLONAR INCIENSO
+    function crearClonesIncienso(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesIncienso(inciensito, numClonesIncienso, radioIncienso, alturaIncienso, 3.92);
+
+    // ** ARROZ IMPORTADO **
+    var arrocito=arroz({x:0, y:0, z:0});
+    scene.add(arrocito);
+    arrocito.position.set(-30,20,0);
+    arrocito.scale.set(1, 1, 1);
+   scene.remove(arrocito);
+
+    // PARAMETROS CLONACIÓN ARROZ
+    var radioArroz = 17.5; // Radio del círculo
+    var alturaArroz = 6; // Altura de los clones
+    var numClonesArroz = 5; // Número de clones
+
+    // CLONAR ARROZ
+    function crearClonesArroz(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesArroz(arrocito, numClonesArroz, radioArroz, alturaArroz, 0.95);
+    
+    // ** JARRA AGUA IMPORTADA **
+    var aguita=agua({x:0, y:0, z:0});
+    scene.add(aguita);
+    aguita.position.set(-30,20,0);
+    aguita.scale.set(2.1, 2.1, 2.1);
+    scene.remove(aguita);
+
+    // PARAMETROS CLONACIÓN AGUA
+    var radioAgua = 12; // Radio del círculo
+    var alturaAgua = 9.8; // Altura de los clones
+    var numClonesAgua = 4; // Número de clones
+
+    // CLONAR JARRA AGUA
+    function crearClonesAgua(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesAgua(aguita, numClonesAgua, radioAgua, alturaAgua, -0.15);
+
+    // ** VASO IMPORTADO **
+    var vasito=vaso({x:0, y:0, z:0});
+    scene.add(vasito);
+    vasito.position.set(-30,20,0);
+    vasito.scale.set(2.2, 2.2, 2.2);
+    scene.remove(vasito);
+
+    // PARAMETROS CLONACIÓN VASO
+    var radioVaso = 12; // Radio del círculo
+    var alturaVaso = 10.2; // Altura de los clones
+    var numClonesVaso = 4; // Número de clones
+
+    // CLONAR VASO
+    function crearClonesVaso(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesVaso(vasito, numClonesVaso, radioVaso, alturaVaso, 0.16);
+
+    // ** TEQUILA IMPORTADA **
+    var tequilita=tequila({x:0, y:0, z:0});
+    scene.add(tequilita);
+    tequilita.position.set(-30,20,0);
+    tequilita.scale.set(0.8, 0.8, 0.8);
+    scene.remove(tequilita);
+
+    // PARAMETROS CLONACIÓN TEQUILA
+    var radioTequila = 12; // Radio del círculo
+    var alturaTequila = 10.1; // Altura de los clones
+    var numClonesTequila = 4; // Número de clones
+
+    // CLONAR TEQUILA
+    function crearClonesTequila(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesTequila(tequilita, numClonesTequila, radioTequila, alturaTequila, Math.PI / 4);
+
+    // ** CABALLITO IMPORTADO **
+    var caballito=caballo({x:0, y:0, z:0});
+    scene.add(caballito);
+    caballito.position.set(-30,20,0);
+    caballito.scale.set(1.3, 1.3, 1.3);
+    scene.remove(caballito);
+
+    // PARAMETROS CLONACIÓN CABALLITO
+    var radioCaballito = 12; // Radio del círculo
+    var alturaCaballito = 10.3; // Altura de los clones
+    var numClonesCaballito = 4; // Número de clones
+
+    // CLONAR CABALLITO
+    function crearClonesCaballito(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesCaballito(caballito, numClonesCaballito, radioCaballito, alturaCaballito, -0.5);
+
+    // ** SAL IMPORTADA **
+    var salesita=sal({x:0, y:0, z:0});
+    scene.add(salesita);
+    salesita.position.set(-30,20,0);
+    salesita.scale.set(0.5, 0.5, 0.5);
+    scene.remove(salesita);
+
+    // PARAMETROS CLONACIÓN SALESITA
+    var radioSalesita = 12; // Radio del círculo
+    var alturaSalesita = 10; // Altura de los clones
+    var numClonesSalesita = 4; // Número de clones
+
+    // CLONAR SALESITA
+    function crearClonesSalesita(baseObject, numClones, radio, altura, offset) {
+        for (var i = 0; i < numClones; i++) {
+            var angle = (i * 2 * Math.PI) / numClones + offset;
+            var x = radio * Math.cos(angle);
+            var z = radio * Math.sin(angle);
+            var clone = baseObject.clone();
+            clone.position.set(x, altura, z);
+            scene.add(clone);
+        }
+    }
+    crearClonesSalesita(salesita, numClonesSalesita, radioSalesita, alturaSalesita, 0.47);
+
+
+    // ** MARCO IMPORTADO **
+    var marquito=marco({x:0, y:0, z:0});
+    scene.add(marquito);
+    marquito.position.set(0, 13.5, 8.8);
+    marquito.scale.set(1.1, 1.1, 1.1);
+    //scene.remove(marquito);
+
+    var marquitoDuplicado = marquito.clone();
+    scene.add(marquitoDuplicado);
+    marquitoDuplicado.position.set(0, 13.5, -8.8);
+
+    // Rotar el duplicado
+    marquitoDuplicado.rotation.y += Math.PI; 
+
+
+    // ** FLOR IMPORTADA - ARCO DE FLORES**
+    var floresita = flor({x:0, y:0, z:0});
+    floresita.position.set(-30, 20, 0);
+    floresita.scale.set(0.15, 0.15, 0.15);
+    scene.remove(floresita);
+
+    // PARAMETROS CLONACIÓN FLORES
+    var numFloresArco = 15; // Número de flores en el arco
+    var radioArco = 20; // Radio del arco
+    var alturaArco = 10; // Altura de las flores desde el suelo
+    var arcoAltura = 30; // Altura máxima del arco
+    var zConstante = 0; // Valor constante para la coordenada z
+
+    var originalPosition = { x: 0, y: 0, z: 0 }; 
+    function crearClonesFlores(numFlores, radio, altura, arcoAltura) {
+        for (var i = 0; i < numFlores; i++) {
+            var florClone = floresita.clone(); 
+            var angle = (Math.PI) * i / (numFlores - 1); // Ajustado a 90 grados
+            var x = radio * Math.cos(angle);
+            var y = altura + arcoAltura * Math.sin(angle);
+            florClone.position.set(x + originalPosition.x, y, zConstante + originalPosition.z);
+            florClone.lookAt(new THREE.Vector3(originalPosition.x, y, zConstante + originalPosition.z));
+            florClone.rotation.x = 0;
+            florClone.rotation.y = 0;
+            florClone.rotation.z = 0;
+            scene.add(florClone);
+        }
+    }
+    crearClonesFlores(numFloresArco, radioArco, alturaArco, arcoAltura);
+
+
+    //🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+
+    //🪄🪄 Animación
+
+    controls.update();
+
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>
